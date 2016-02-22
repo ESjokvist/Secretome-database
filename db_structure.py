@@ -27,7 +27,7 @@ class Specie(Base):
 
 class Taxonomy(Base):
     __tablename__ = "taxonomies"
-    id = Column(Integer,primary_key=True, autoincrement=False)
+    id = Column(Integer,primary_key=True, autoincrement=False, index=True)
     
     species = relationship(
         "Specie", 
@@ -42,7 +42,7 @@ class Taxonomy(Base):
     family=Column(String)
     order=Column(String)
     t_class=Column(String)
-    phylum=Column(String)
+    phylum=Column(String, index=True)
 
     
 class Genome(Base):
