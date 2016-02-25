@@ -1,21 +1,34 @@
 #+TITLE:Orthology analyses of 394 fungal proteomes
 #+AUTHOR:Elisabet Sjökvist
+#+CREATOR:SRUC
 
-#+LATEX_CLASS: beamer
+#+LATEX_CLASS:beamer
 #+LATEX_HEADER:\hypersetup{colorlinks= true, urlcolor= blue,linkcolor= none citecolor= red}
 # #+LATEX_HEADER:\usepackage{ajbeamer}
+#+LATEX_CLASS_OPTIONS: [presentation]
+#+BEAMER_THEME: Madrid
+#+OPTIONS:   H:5 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+
+* Fungi
+[[~/Documents/Presentations/Botaniska_tradgarden/Hyfer.jpg]]
 
 * Project backgound
   - How do pathogens evolve?
     - how has the secretome evolved, and how does that differ between fungi with different nutritional strategies?
     - how has the effector repetoar evolved?
     - what is the composition of carbohydrate active enzymes and lignocellolytic enzymes?
-  
-* Genomes
+    - can pathogenicity be predicted
+    - is it possible to identify the nutritional mode of a fungus given its secretome? 
+
+* Fungal genomes
+- fungal genomes are small 30-40 Mbp
+- 10 000 proteins  
+
+** Avaliable genomes:
   - 564 genomes in Ensembl
   - 659 genomes in NCBI
   - 567 genomes in JGI, not all published
-  - 394 publicly avaliable proteomes of "different species"
+  -> 394 publicly avaliable proteomes of "different species"
 
 * Orthology analyses
 ** All vs. all blast ~ 4 weeks
@@ -23,33 +36,34 @@
    - 395 blast databases
    - min. 30aa
    - max one stop codon at end of sequence
-** Orthofinder ~ 9 days
+
+** OrthoFinder ~ 9 days
+   input:
    - SequenceIDs.txt
    - SpeciesIDs.txt
    - 156025 blast result files
+
+* Database structure
+#+CAPTION:
+[[./presentation/fun_395_table_view.pdf]]
 * Distribution of cluster sizes
 #+CAPTION: Distribution of cluster sizes, y-axis = nr of clusters, x-axis = proteins per cluster
 [[./proteins_per_cluster.pdf]]
 
-* Database structure
-#+CAPTION: Organization
-[[./presentation/database_structure_fun_395.pdf]]
+* Taxonomy                     
 
+  | species count | phylum              | single phylum clusters |
+  |---------------+---------------------+------------------------|
+  |            11 | undef               |                   5021 |
+  |             3 | Chytridiomycota     |                    402 |
+  |           234 | Ascomycota          |                  56776 |
+  |             1 | Glomeromycota       |                    402 |
+  |            88 | Basidiomycota       |                  33050 |
+  |            19 | Microsporidia       |                   4124 |
+  |             1 | Blastocladiomycota  |                    313 |
+  |             1 | Cryptomycota        |                     56 |
+  |             1 | Entomophthoromycota |                     83 |
 
-* Taxonomy                     ^
-fun395=# select count(taxonomies.id), taxonomies.phylum from taxonomies group by taxonomies.phylum;
- count |       phylum        
--------+---------------------
-    11 | undef
-     3 | Chytridiomycota
-   234 | Ascomycota
-     1 | Glomeromycota
-    88 | Basidiomycota
-    19 | Microsporidia
-     1 | Blastocladiomycota
-     1 | Cryptomycota
-     1 | Entomophthoromycota
-(9 rows)
 
 
 
@@ -59,4 +73,17 @@ fun395=# select count(taxonomies.id), taxonomies.phylum from taxonomies group by
 #+CAPTION: y-axis nr of clusters/gene familes, x-axis species sampled
 [[./gene_families_plotted.pdf]]
 
+* To do
+- identify HGT
+- species level phylogeny
+- link all genes to functional annotaiton
+- gene family trees for effector proteins
+
+
+* Thanks
+-  To Mark Blaxter, Neil Havis & the Blaxter lab
+** Special thanks to 
+- Johan Rohlen
+- Sujai Kumar
+- Dominik Laetsch
 

@@ -26,12 +26,18 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-species_phylums = session.query(Taxonomy.phylum, func.count(Taxonomy.id)).group_by(Taxonomy.phylum)
-print(species_phylums.all())
+#species_phylums = session.query(Taxonomy.phylum, func.count(Taxonomy.id)).group_by(Taxonomy.phylum)
+#print(species_phylums.all())
 
 cluster_phylums = session.query(Cluster.id, Taxonomy.phylum, func.count(Taxonomy.phylum)).join(Cluster.proteins).join(Genome).join(Specie).join(Specie.taxonomies).group_by(Cluster.id, Taxonomy.phylum)
-#
-print(cluster_phylums)
-#
-#
-print(cluster_phylums.first())
+
+phylum_annotated_clusters={}
+for i,j,k in cluster_phylums.all():
+    my_dict = phylum_annotated_clusters.get(i, {})
+    my_dict[j] = k
+    phylum_annotated_clusters[i]=my_dict
+#print(cluster_phylums[:10000])
+
+with open("cluster_by_phylum.json", "w") as f:
+    json.dump(phylum_annotated_clusters, f)
+
