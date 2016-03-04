@@ -1,1 +1,6 @@
 *~
+*.pdf
+*.tex
+sftp
+*.json
+*.txt

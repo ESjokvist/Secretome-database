@@ -73,6 +73,9 @@ def clusters_for_random_species(limit, distinct=True):
             protein_families[cluster[0]] = n + 1 
     return protein_families
 
+print clusters_for_random_species
+
+
 
 gene_families_from_species=[]
 for i in range(300, 400, 20):
@@ -90,82 +93,3 @@ print(gene_families_from_species)
 #    json.dump(gene_families_from_species, f)
 
 
-#    print("{0}: {1}".format(sp.name, n_query.all()))
-
-
-#n_cluster = session.query(func.count(Cluster.protein)).first()
-#print(n_cluster)
-
-
-#random_species=select([Specie.name]).func.random().limit(10)
-
-#for species in random_species:
-#    print species.name
-
-
-#Ascomycete_one=session.query(Specie).filter(Specie.taxonomies.any(phylum="Ascomycota")).first()
-#print Ascomycete_one.id
-
-#Ascomycetes=session.query(Specie).filter(Specie.taxonomies.any(phylum="Ascomycota"))
-#for species in Ascomycetes.all():
-#    print species.name
-#print(Ascomycetes.column_descriptions)
-
-#Ascomycetes=select([Specie.name]).where(Specie.taxonomies.any(phylum="Ascomycota"))
-
-
-
-
-
-
-#print(Ascomycetes.items())
-#results=Ascomycetes.execute()
-
-#for row in results:
-#    print row 
-
-#print(Ascomycetes.species_name())
-#print(gene_families.count())
-
-# 2) genes distributed in 10% of taxa and all over the kingdom
-# which clusters contain taxa from > 1 Class + not all in any class.
-
-
-
-      # 3) shape of gene family sizes
-# print len(clusters) to table, then plot
-
-
-#species = session.query(Specie).filter(Specie.taxonomies.any(phylum='Ascomycota')).all()
-
-#genomes = [g for g in chain(*[s.genomes for s in species])]
-
-
-
-#proteins = session.query(Protein).join(Genome).join(Specie). \
-#    filter(Specie.taxonomies.any(phylum='Ascomycota')). \
-#    filter(Protein.aminoacid_sequence.op('~')('L.FLAK'))
-
-
-#print(proteins.count())
-
-#protein_names = [
-# 'jgi|Antlo1|1000|2084', 
-# 'jgi|Antlo1|1001|1076', 
-# 'jgi|Antlo1|1002|2059', 
-# 'jgi|Antlo1|100|2380',
-# 'jgi|Antlo1|1003|2285', 
-# 'jgi|Antlo1|1004|2286', 
-# 'jgi|Antlo1|1005|2287', 
-# 'jgi|Antlo1|1006|2045', 
-# 'jgi|Antlo1|1007|2245', 
-# 'jgi|Antlo1|1008|1990',
-    #]
-
-#proteins = session.query(Protein).filter(Protein.name.in_(protein_names))
-
-#print(proteins.count())
-
-#protein_data = session.query(Protein.id, Protein.name).all()
-
-#species = session.query(Specie).filter(Specie.taxonomies.any(phylum='Ascomycota')).all()
