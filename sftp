@@ -1,1 +1,0 @@
-sudo sshfs -o allow_other -o IdentityFile=~/.ssh/id_rsa esjokvist@galactus.bio.ed.ac.uk:/exports/projects/ramularia /mnt/cluster_ramularia
