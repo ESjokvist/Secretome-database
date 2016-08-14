@@ -1,7 +1,9 @@
+# Script for creating database structure in postgres
 import contextlib
 import os
 import logging
 import json
+from settings import DATABASE_URL
 
 logger = logging.getLogger('secretome.database_operations')
 
@@ -11,7 +13,7 @@ from sqlalchemy.orm import sessionmaker, load_only
 from db_structure import Base, Specie, Taxonomy, Genome, Protein, get_or_create, Cluster, cluster_protein_table
  
 # Create the engine.
-engine = create_engine('postgresql://secretome:secretome@localhost/fun395')
+engine = create_engine(DATABASE_URL)
 
 # create a configured "Session" class
 Session = sessionmaker(bind=engine)
@@ -24,7 +26,6 @@ def find_gene_name(line):
     for item in line.split():
         if item.startswith("gene"):
             return item.split(":")[1]
-
 
 
 # Add genomes and species names
@@ -42,6 +43,7 @@ def add_proteins(path_to_proteinfolder, exclude_list=[], skip_existing=False):
         f for f in os.listdir(path_to_proteinfolder) 
         if os.path.isfile(os.path.join(path_to_proteinfolder, f)) and
         f not in exclude_list
+        and session.query(Genome).filter_by(genome_name=f).count()
     ]
 
     for file in files:
@@ -65,8 +67,8 @@ def add_proteins(path_to_proteinfolder, exclude_list=[], skip_existing=False):
                             name = line.split()[0][1:]
                             gene_name = ""
                         elif file == "DK05_all_proteins_1_2.fasta":
-                            name = line.split()[0][1:]
-                            gene_name = line.split("|")[1].split()[0]
+                            name = line[1:]
+                            gene_name = line[1:]
                         elif file == "Alternaria_brassicicola_proteins.fasta":
                             name = line[1:].strip()
                             gene_name = line[1:].strip()
@@ -137,12 +139,16 @@ def add_taxonomy(path):
         session.add(taxa)
     session.commit()
 
-def add_species(path):
+
+def add_species(path, SpeciesIds):
+    with open(SpeciesIds) as Specieslist:
+        specieslist=[line.split(": ")[1].rstrip() for line in Specieslist if line[0].isdigit()]
     with open(path) as f:
         taxon_dict = {}
         for line in f:
             columns = line.split("\t")
-            taxon_dict[columns[0]]=[c.strip() for c in columns if c != ""]
+            if columns[0] in specieslist:
+                taxon_dict[columns[0]]=[c.strip() for c in columns if c != ""]
     for genome_name, specie_info in taxon_dict.items():
         specie = get_or_create(session, Specie, name=specie_info[1])
         specie.current_name = specie_info[2]
@@ -153,8 +159,7 @@ def add_species(path):
         session.add(specie)
     session.commit()
 
-
-def add_clusters(path):
+def add_clusters(path, i_value):
     """ Function to add cluster names and respective protein  names to Cluster table in database
     
     :param path: path to file with orthofinder clusters, in txt format
@@ -184,6 +189,7 @@ def add_clusters(path):
                 #logger.debug("Protein diff: {}".format(diff))
             
             cluster.proteins = proteins
+            cluster.clustering_inflation_value=i_value
             session.add(cluster)
             
             if (i < 100 and i % 10 == 0) or i % 1000 == 0:
