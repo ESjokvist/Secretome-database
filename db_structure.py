@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, ForeignKey, String, Text
+from sqlalchemy import Table, Column, Integer, ForeignKey, String, Text, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
@@ -89,6 +89,7 @@ class Cluster(Base):
     id=Column(Integer, primary_key=True, index=True)
     name=Column(String)
     proteins=relationship("Protein", secondary=cluster_protein_table, backref="clusters", cascade_backrefs=False)
+    clustering_inflation_value=Column(Float)
 
 
 # Can be used to get or create a model.
