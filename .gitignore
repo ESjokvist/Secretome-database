@@ -7,3 +7,5 @@ sftp
 *#
 *.pyc
 settings.py
+
+import_everything.py
