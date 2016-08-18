@@ -159,6 +159,7 @@ def add_species(path, SpeciesIds):
         session.add(specie)
     session.commit()
 
+
 def add_clusters(path, i_value):
     """ Function to add cluster names and respective protein  names to Cluster table in database
     
@@ -197,6 +198,28 @@ def add_clusters(path, i_value):
                 session.commit()
         
         session.commit()
+
+
+def add_functional_annotation_kogs(path_to_dir):
+    files = [
+        f for f in os.listdir(path_to_dir) 
+        if os.path.isfile(os.path.join(path_to_dir, f)) and
+        f not in exclude_list
+        and session.query(Genome).filter_by(genome_name=f.strip(".kogs").exists()
+    ]
+    for file in files:
+        logger.info("Parsing file {}".format(file))
+        with open(os.path.join(path_to_proteinfolder, file)) as f:
+            for line in f:
+               if line.startswith("KOG"):
+                   functional_annotation = FunctionalAnnotation()
+                   KOG=line.split("\t")[0]:
+                   protein_name=line.split("\t")[2]:
+                   functional_annotation.KOG=KOG
+                   protein = session.query(Protein).filter_by(name=protein_name).get()
+                   functional_annotation.protein=protein
+                   session.add(functional_annotation)
+        session.commit()        
 
 def clear_database():
     with contextlib.closing(engine.connect()) as con:
