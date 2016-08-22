@@ -10,7 +10,7 @@ logger = logging.getLogger('secretome.database_operations')
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, load_only
 
-from db_structure import Base, Specie, Taxonomy, Genome, Protein, get_or_create, Cluster, cluster_protein_table
+from db_structure import Base, Specie, Taxonomy, Genome, Protein, get_or_create, Cluster, cluster_protein_table, FunctionalAnnotation
  
 # Create the engine.
 engine = create_engine(DATABASE_URL)
@@ -203,20 +203,19 @@ def add_clusters(path, i_value):
 def add_functional_annotation_kogs(path_to_dir):
     files = [
         f for f in os.listdir(path_to_dir) 
-        if os.path.isfile(os.path.join(path_to_dir, f)) and
-        f not in exclude_list
-        and session.query(Genome).filter_by(genome_name=f.strip(".kogs").exists()
+        if os.path.isfile(os.path.join(path_to_dir, f))
+        and session.query(Genome).filter_by(genome_name=f.strip(".kogs")).count()
     ]
     for file in files:
         logger.info("Parsing file {}".format(file))
-        with open(os.path.join(path_to_proteinfolder, file)) as f:
+        with open(os.path.join(path_to_dir, file)) as f:
             for line in f:
                if line.startswith("KOG"):
                    functional_annotation = FunctionalAnnotation()
-                   KOG=line.split("\t")[0]:
-                   protein_name=line.split("\t")[2]:
+                   KOG=line.split(" ")[0]
+                   protein_name=line.split("              -          ")[1].split(" ")[0].strip(" ")
                    functional_annotation.KOG=KOG
-                   protein = session.query(Protein).filter_by(name=protein_name).get()
+                   protein = session.query(Protein).filter_by(name=protein_name).one()
                    functional_annotation.protein=protein
                    session.add(functional_annotation)
         session.commit()        
