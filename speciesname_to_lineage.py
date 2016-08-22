@@ -1,5 +1,6 @@
 from __future__ import division
-RANKS = ['no rank', 'varietas', 'species', 'genus', 'family', 'order', 'class', 'phylum', 'superkingdom']
+import json
+RANKS = ['no rank', 'varietas', 'species', 'genus', 'family', 'order', 'class', 'phylum']
 
 import sys
 
@@ -68,7 +69,8 @@ def getTaxId(species_names, nodesDB):
             species_taxid[value["name"]]=key
             taxIds.append(key)
 #            print value["name"]
-#    print species_taxid
+    with open ("taxon_taxid.json", "w") as f:
+        json.dump(species_taxid, f)
     return taxIds
     
 if __name__ == "__main__":
@@ -85,4 +87,6 @@ if __name__ == "__main__":
 	tree_lists = getTreeList(set_of_taxIds, nodesDB)
 	lineages = getLineages(tree_lists, nodesDB)
 
-print lineages
+with open ("lineages.json", "w") as f2:
+    json.dump(lineages, f2)
+
