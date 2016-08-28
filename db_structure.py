@@ -83,6 +83,7 @@ class FunctionalAnnotation(Base):
     KEGG=Column(String)
     KOG=Column(String)
     protein_id=Column(Integer, ForeignKey("proteins.id"))
+    protein = relationship("Protein")
 
 class Cluster(Base):
     __tablename__="clusters"
